@@ -14,11 +14,5 @@ try {
     $erreur .= " : ";
     $erreur .= $e->getMessage();
     // arrêt du script
-    //die($erreur);
+    die($erreur);
 }
-?>
-<p>
-    <?php
-    if(isset($erreur)) echo $erreur; else var_dump($connexion);
-    ?>
-</p>
