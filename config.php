@@ -1,5 +1,6 @@
 <?php
 // constantes de connexion
+define("DB_TYPE","mysql");
 define("DB_HOST","localhost");
 define("DB_NAME","exemple_pdo");
 define("DB_LOGIN","root");

@@ -6,6 +6,8 @@ $sql=" INSERT INTO articles (thetitle,thetext,users_idusers) VALUES('coucou3','L
 // insertion
 $nb = $connexion->exec($sql);
 
+
+
 // récupération du dernier id inséré (par cet utilisateur, attention si on insert de multiples articles en une requête, il va nous donner le premier article de cette requête!!! https://www.php.net/manual/fr/pdo.lastinsertid.php)
 $lastid = $connexion->lastInsertId();
 
@@ -15,6 +17,7 @@ $nbupdate = $connexion->exec("UPDATE articles SET thetext = 'lalala lala' WHERE 
 
 // delete
 $nbdelete = $connexion->exec("DELETE FROM articles WHERE idarticles = 8");
+
 
 
 ?>

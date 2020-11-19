@@ -12,6 +12,9 @@ $users = $recup_users->fetchAll(PDO::FETCH_ASSOC);
 
 $nb = $recup_users->rowCount();
 
+// fermeture du jeu de données (le pointeur retourne à son état initial, inutile en mysql er MariaDB, mais c'est une bonne pratique de le garder pour la portabilité du code)
+$recup_users->closeCursor();
+
 
 
 ?>

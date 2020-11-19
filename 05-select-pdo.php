@@ -10,6 +10,8 @@ FROM articles a
 // utilisation de query sur l'instance PDO $connexion car SELECT
 $recup = $connexion->query($sql);
 
+
+
 // si je n'ai pas de résultats
 if (!$recup->rowCount()) $erreur = "Pas encore d'articles";
 
@@ -41,6 +43,7 @@ else:
     <p>Ecrit par <?=$item->thename?> le <?=$item->thedate?></p>
     <?php
     endwhile;
+    $recup->closeCursor();
     ?>
     <hr>
 <?php
