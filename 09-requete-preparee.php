@@ -4,56 +4,37 @@ require_once "config.php";
 
 // connection
 try {
-    $connexion = new PDO(DB_TYPE.":host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET.";port=".DB_PORT, DB_LOGIN, DB_PWD);
-    // on veut voir les erreurs, on peut les activer avec setAttibute (PDO::ATTR_ERRMODE) et les exceptions (PDO::ERRMODE_EXCEPTION)
-    $connexion->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
+    // les erreurs sont immédiatement activées dans la connexion
+    $connexion = new PDO(DB_TYPE.":host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET.";port=".DB_PORT, DB_LOGIN, DB_PWD,[PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION]);
 
 }catch(PDOException $e){
     die($e->getCode()." : ".$e->getMessage());
 }
 
-// Votre code d'insertion se met ici
-// si le formulaire est envoyé
-if(!empty($_POST)){
-    $thelogin = htmlspecialchars(strip_tags(trim($_POST['thelogin'])),ENT_QUOTES);
-    $thepwd= htmlspecialchars(strip_tags(trim($_POST['thelogin'])),ENT_QUOTES);
-    $thename = htmlspecialchars(strip_tags(trim($_POST['thelogin'])),ENT_QUOTES);
-    if(!empty($thelogin)&&!empty($thepwd)&&!empty($thename)){
-        $sql = "INSERT INTO users (thelogin,thepwd,thename) VALUES ('$thelogin','$thepwd','$thename');";
-        // insertion avec exec
-        try {
-            $nb = $connexion->exec($sql);
-            $response = "Nouvel utilisateur enregistré";
-        }catch (PDOException $e){
-
-            // code PDO pour une erreur
-            if($e->getCode()==23000){
-                // si le code MySQL 1062 se trouve dans le message d'erreur (pas false)
-                if(strpos($e->getMessage(),"1062") ) {
-                    // le problème vient d'un duplicate content
-                    $response = "Votre login et/ ou votre nom existe déjà!";
-                }else{
-                    $response = "Erreur : " . $e->getMessage();
-                }
-            }else {
-                $response = "Erreur : " . $e->getMessage();
-            }
-        }
-
-    }else{
-        $response = "Le format des champs doit être respecté!";
+// si on a cliqué sur un utilisateur et que c'est bien un numérique non signé dans le string de la variable get
+if(isset($_GET['idusers'])){
+    // création d'un marqueur de paramètre non nommé (?) dans la requête
+    $sql = "SELECT * FROM users WHERE idusers=? ;";
+    // on signifie à PDO qu'on protège la requête en la préparant (autre avantage que la protection: la répétition rapide du code car il reste en mémoire)
+    $prepareUsers = $connexion->prepare($sql);
+    // on place la valeur dans la requête préparée, 1 est le premier "?" de la requête lue de gauche à droite, suivi de la valeur que l'on souhaite insérée, puis de manière optionnelle mais recommandée la reconversion dans le type accepté
+    $prepareUsers->bindValue(1,$_GET['idusers'],PDO::PARAM_INT);
+    // exécution de la requête et récupération de la valeur
+    $prepareUsers->execute();
+    // on a récupéré un utilisateur
+    if($prepareUsers->rowCount()){
+        $recupUsers = $prepareUsers->fetch(PDO::FETCH_ASSOC);
+        $response = "Vous avez sélectionné ".$recupUsers["thename"];
     }
 }
 
 // récupération de données
 $sql="SELECT * FROM users;";
 $recup = $connexion->query($sql);
-// on peut dire à notre connexion quel genre de fetch on veut utiliser pour notre requête (version longue)
-$recup->setFetchMode(PDO::FETCH_OBJ);
 
 
 // transformation en données exploitables par PHP (ici tableau indexé contenant des objets de type stdClass)
-$recupUsers = $recup->fetchAll();
+$recupUsers = $recup->fetchAll(PDO::FETCH_OBJ);
 // convention closeCursor
 $recup->closeCursor();
 ?>
@@ -64,10 +45,10 @@ $recup->closeCursor();
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>prepare</title>
 </head>
 <body>
-<h3>Exercice d'insertion d'utilisateurs</h3>
+<h3>prepare</h3>
 <p>Essayez d'insérer un utilisateur avec le formulaire ci-dessous</p>
 <hr>
 <?php if(isset($response)) echo "<h4>$response</h4>" ?>
@@ -80,12 +61,12 @@ $recup->closeCursor();
 <hr>
 <?php
 
-var_dump($_POST);
+var_dump($_POST,$_GET);
 
 foreach($recupUsers as $users):
 ?>
 <h3><?=$users->thelogin?></h3>
-<p><?=$users->thename?></p>
+    <p><?=$users->thename?> | <a href="?idusers=<?=$users->idusers?>">détail</a></p>
 <?php
 endforeach;
 ?>

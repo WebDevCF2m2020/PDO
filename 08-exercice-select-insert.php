@@ -64,7 +64,7 @@ $recup->closeCursor();
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Exercice</title>
 </head>
 <body>
 <h3>Exercice d'insertion d'utilisateurs</h3>
@@ -79,8 +79,6 @@ $recup->closeCursor();
 </form>
 <hr>
 <?php
-
-var_dump($_POST);
 
 foreach($recupUsers as $users):
 ?>
