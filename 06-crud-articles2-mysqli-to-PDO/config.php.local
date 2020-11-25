@@ -1,6 +1,6 @@
 <?php
 // Database
-define("DB_TYPE","mysqli");
+define("DB_TYPE","mysql");
 define("DB_HOST","localhost");
 define("DB_NAME","articles2");
 define("DB_USER","root");
