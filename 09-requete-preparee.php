@@ -11,16 +11,52 @@ try {
     die($e->getCode()." : ".$e->getMessage());
 }
 
+// on essaye d'insérer le formulaire (donc données utilisateur)
+if(!empty($_POST)){
+    // protection procédurale
+    $thelogin = htmlspecialchars(strip_tags(trim($_POST['thelogin'])),ENT_QUOTES);
+    $thepwd= htmlspecialchars(strip_tags(trim($_POST['thepwd'])),ENT_QUOTES);
+    $thename = htmlspecialchars(strip_tags(trim($_POST['thename'])),ENT_QUOTES);
+
+
+        // requête préparée avec les ?
+        $sql = "INSERT INTO users (thelogin,thepwd,thename) VALUES (?,?,?);";
+
+        // prepare prépare réellement la requête stockée dans une variable
+        $prepareInsertUsers = $connexion->prepare($sql);
+
+        // attribution des valeurs avec des numériques représentant les ? de la requête préparée en la lisant de gauche à droite (et en commençant par 1), PDO::PARAM_STR :  string, PDO::PARAM_INT : int
+        $prepareInsertUsers->bindValue(1,$thelogin,PDO::PARAM_STR);
+        $prepareInsertUsers->bindValue(2,$thepwd,PDO::PARAM_STR);
+        $prepareInsertUsers->bindValue(3,$thename,PDO::PARAM_STR);
+
+
+
+        // insertion avec execute
+            $nbInsert = $prepareInsertUsers->execute();
+            if($nbInsert){
+                $response = "Nouvel utilisateur enregistré";
+            }else{
+
+            $response = "Erreur lors de l'insertion";
+        }
+}
+
 // si on a cliqué sur un utilisateur et que c'est bien un numérique non signé dans le string de la variable get
 if(isset($_GET['idusers'])){
     // création d'un marqueur de paramètre non nommé (?) dans la requête
     $sql = "SELECT * FROM users WHERE idusers=? ;";
-    // on signifie à PDO qu'on protège la requête en la préparant (autre avantage que la protection: la répétition rapide du code car il reste en mémoire)
+
+    // on signifie à PDO qu'on protège la requête en la préparant (autre avantage que la protection: la répétition rapide du code car il reste en mémoi
+    //re)
     $prepareUsers = $connexion->prepare($sql);
+
     // on place la valeur dans la requête préparée, 1 est le premier "?" de la requête lue de gauche à droite, suivi de la valeur que l'on souhaite insérée, puis de manière optionnelle mais recommandée la reconversion dans le type accepté
     $prepareUsers->bindValue(1,$_GET['idusers'],PDO::PARAM_INT);
+
     // exécution de la requête et récupération de la valeur
     $prepareUsers->execute();
+
     // on a récupéré un utilisateur
     if($prepareUsers->rowCount()){
         $recupUsers = $prepareUsers->fetch(PDO::FETCH_ASSOC);
@@ -61,7 +97,7 @@ $recup->closeCursor();
 <hr>
 <?php
 
-var_dump($_POST,$_GET);
+//var_dump($_POST,$_GET);
 
 foreach($recupUsers as $users):
 ?>

@@ -16,8 +16,8 @@ try {
 // si le formulaire est envoyé
 if(!empty($_POST)){
     $thelogin = htmlspecialchars(strip_tags(trim($_POST['thelogin'])),ENT_QUOTES);
-    $thepwd= htmlspecialchars(strip_tags(trim($_POST['thelogin'])),ENT_QUOTES);
-    $thename = htmlspecialchars(strip_tags(trim($_POST['thelogin'])),ENT_QUOTES);
+    $thepwd= htmlspecialchars(strip_tags(trim($_POST['thepwd'])),ENT_QUOTES);
+    $thename = htmlspecialchars(strip_tags(trim($_POST['thename'])),ENT_QUOTES);
     if(!empty($thelogin)&&!empty($thepwd)&&!empty($thename)){
         $sql = "INSERT INTO users (thelogin,thepwd,thename) VALUES ('$thelogin','$thepwd','$thename');";
         // insertion avec exec

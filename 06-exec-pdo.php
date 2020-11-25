@@ -20,6 +20,7 @@ $nbdelete = $connexion->exec("DELETE FROM articles WHERE idarticles = 8");
 
 
 
+
 ?>
 <!doctype html>
 <html lang="en">
