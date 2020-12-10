@@ -2,6 +2,8 @@
 // dependencies
 require_once "config.php";
 
+
+
 // on essaie de se connecter
 try {
     // instanciation de PDO avec nos constantes
