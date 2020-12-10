@@ -15,7 +15,7 @@ $sql = "SELECT * FROM users";
 $requestMysqli = mysqli_query($dbMysqli,$sql);
 $resultMysqli = mysqli_fetch_all($requestMysqli,MYSQLI_ASSOC);
 
-// Requête en PDO
+// Requête en PDO, on utilise $db->query QUE pour des SELECT SANS données utilisateurs
 $requestPDO =$dbPDO->query($sql);
 $resultPDO = $requestPDO->fetchAll(PDO::FETCH_ASSOC);
 

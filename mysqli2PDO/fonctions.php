@@ -11,7 +11,7 @@ function createDatasArticles()
 // lettres pour tous
     $lettres = "abcdefoip";
 // on mélange les lettres pour le titre str_shuffle
-    $thetitle = str_shuffle($lettres);
+    $thetitle = ucfirst(str_shuffle($lettres));
 // on crée un tableau à partir de texte "Lorem Ipsum" divisé par l'espace
     $mots = explode(" ","Lorem ipsum dolor sit amet
 consectetur adipisicing elit sed do eiusmod tempor incididunt ut
