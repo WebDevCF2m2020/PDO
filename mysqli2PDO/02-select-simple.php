@@ -5,8 +5,20 @@ require_once "01-connection.php";
 // connexion via mysqli
 $dbMysqli = connectMysqli();
 
+// connexion via PDO
 $dbPDO = connectPDO();
 
+// simple requête SELECT (sans données utilisateurs => passages de variables)
+$sql = "SELECT * FROM users";
+
+// Requête en mysqli
+$requestMysqli = mysqli_query($dbMysqli,$sql);
+$resultMysqli = mysqli_fetch_all($requestMysqli,MYSQLI_ASSOC);
+
+// Requête en PDO
+$requestPDO =$dbPDO->query($sql);
+$resultPDO = $requestPDO->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
-<pre><?php var_dump($dbMysqli,$dbPDO); ?></pre>
+<pre><?php var_dump($resultMysqli,$resultPDO); ?></pre>
 
