@@ -19,6 +19,11 @@ $resultMysqli = mysqli_fetch_all($requestMysqli,MYSQLI_ASSOC);
 $requestPDO =$dbPDO->query($sql);
 $resultPDO = $requestPDO->fetchAll(PDO::FETCH_ASSOC);
 
+/*
+ * version courte
+ * $resultPDO = $dbPDO->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+ */
+
 ?>
 <pre><?php var_dump($resultMysqli,$resultPDO); ?></pre>
 
