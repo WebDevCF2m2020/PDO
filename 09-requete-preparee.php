@@ -19,7 +19,7 @@ if(!empty($_POST)){
     $thename = htmlspecialchars(strip_tags(trim($_POST['thename'])),ENT_QUOTES);
 
 
-        // requête préparée avec les ?
+        // requête préparée avec les marqueurs ?
         $sql = "INSERT INTO users (thelogin,thepwd,thename) VALUES (?,?,?);";
 
         // prepare prépare réellement la requête stockée dans une variable
