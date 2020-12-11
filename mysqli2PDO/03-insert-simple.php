@@ -75,6 +75,7 @@ $request->closeCursor();
 echo "<h2>Affichage des {$request->rowCount()} dernier article(s)</h2>";
 
 foreach ($recup10LastArticles as $item):
+
     ?>
     <h3><?= $item->thetitle ?></h3>
     <p><?= $item->thetext ?></p>
