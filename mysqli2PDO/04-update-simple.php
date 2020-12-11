@@ -41,7 +41,7 @@ $sql = "SELECT * FROM articles ORDER BY thedate DESC, idarticles DESC";
 $request = $dbPDO->query($sql);
 
 // transformation du résultat de la requête en tableau indexé (toujours pour fetchAll) avec des valeurs de type objets (PDO::FETCH_OBJ)
-$recup10LastArticles = $request->fetchAll(PDO::FETCH_OBJ);
+$recupAllArticles = $request->fetchAll(PDO::FETCH_OBJ);
 
 
 // Portabilité du code (inutile en mySQL ou MariaDB): remise de la requête à son état initial
@@ -62,7 +62,7 @@ $request->closeCursor();
 <h3><?=$nbUpdate?> articles ont été modifiés au chargement de cette page</h3>
 
 <?php
-foreach ($recup10LastArticles as $item):
+foreach ($recupAllArticles as $item):
 
 ?>
 <h3><?= $item->idarticles ." | ". $item->thetitle ?></h3>
