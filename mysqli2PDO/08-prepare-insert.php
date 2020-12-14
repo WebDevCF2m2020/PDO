@@ -7,6 +7,44 @@ require_once "01-connection.php";
 $dbPDO = connectPDO();
 
 /*
+ * Si on veut insérer un article
+ * Insertion avec marqueurs non nommés et bindValue
+ */
+if(isset($_POST['thetitle'])){
+
+    // important de traiter les variables, les requêtes préparées préviennent des injection SQL, mais pas de la validité des données insérées !
+    $thetitle = strip_tags(trim($_POST['thetitle']));
+    $thetext = strip_tags(trim($_POST['thetext']));
+    $users_idusers = (int) $_POST['users_idusers'];
+
+    //
+    if(!empty($thetitle)&&!empty($thetext)&&!empty($users_idusers)) {
+
+        // les marqueurs non nommés se lisent dans le sens de la lecture (gauche à droite): 1, 2, 3
+        $sql = "INSERT INTO articles (thetitle,thetext,users_idusers) VALUES (?,?,?)";
+
+        // on prépare la requête
+        $prepare = $dbPDO->prepare($sql);
+
+        // on attribue les valeurs grâce au bindValue()
+        $prepare->bindValue(1, $thetitle, PDO::PARAM_STR);
+        $prepare->bindValue(2, $_POST['thetext'], PDO::PARAM_STR);
+        $prepare->bindValue(3, $_POST['users_idusers'], PDO::PARAM_INT);
+
+        try {
+            // exécution de la requête
+            $prepare->execute();
+            $message = "Article inséré";
+        } catch (PDOException $e) {
+            $message = "Erreur lors de l'insertion: " . $e->getMessage();
+        }
+
+    }else{
+        $message = "Vos données ne sont pas au format adéquat";
+    }
+}
+
+/*
  * Récupération de tous les utilisateurs
  */
 
@@ -49,6 +87,9 @@ $request->closeCursor();
 </head>
 <body>
 <h2>Insertion d'un nouvel article</h2>
+<?php
+if(isset($message)) echo "<h3>$message</h3>";
+?>
 <form action="" name="insert" method="post">
     <input type="text" name="thetitle" placeholder="Votre titre" required><br>
     <textarea name="thetext" placeholder="Votre texte" required></textarea><br>
@@ -66,6 +107,8 @@ $request->closeCursor();
 <h2>Affichage des <?=$request->rowCount()?> dernier articles</h2>
 <p>
 <?php
+// var_dump($_POST);
+
 foreach ($recupAllArticles as $item):
 ?>
 <h4><?=$item->idarticles?> | <?=$item->thetitle ?> | <?=$item->thedate ?></h4>
