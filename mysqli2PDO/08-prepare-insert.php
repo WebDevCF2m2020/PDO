@@ -17,7 +17,7 @@ if(isset($_POST['thetitle'])){
     $thetext = strip_tags(trim($_POST['thetext']));
     $users_idusers = (int) $_POST['users_idusers'];
 
-    //
+    // Si pas d'erreurs de la part de l'utilisateur
     if(!empty($thetitle)&&!empty($thetext)&&!empty($users_idusers)) {
 
         // les marqueurs non nommés se lisent dans le sens de la lecture (gauche à droite): 1, 2, 3
