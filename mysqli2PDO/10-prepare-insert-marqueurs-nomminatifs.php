@@ -20,18 +20,17 @@ if(isset($_POST['thetitle'])){
     // Si pas d'erreurs de la part de l'utilisateur
     if(!empty($thetitle)&&!empty($thetext)&&!empty($users_idusers)) {
 
-        // les marqueurs non nommés se lisent dans le sens de la lecture (gauche à droite): 1, 2, 3
-        $sql = "INSERT INTO articles (thetitle,thetext,users_idusers) VALUES (?,?,?)";
+        // les paramètres nommés (marqueurs) n'ont pas d'ordres de lectures format -> :nom (respect de nommage des variables)
+        $sql = "INSERT INTO articles (thetitle,thetext,users_idusers) VALUES (:title,:text,:iduser)";
 
         // on prépare la requête
         $prepare = $dbPDO->prepare($sql);
 
-        // on attribue les valeurs grâce au bindParam(), c'est valeurs doivent être des variables, elles sont donc variables  sur le serveur de base de donnée
-        // interdit:
-        // $prepare->bindParam(1, "Lala".$thetitle, PDO::PARAM_STR);
-        $prepare->bindParam(1, $thetitle, PDO::PARAM_STR);
-        $prepare->bindParam(2, $thetext, PDO::PARAM_STR);
-        $prepare->bindParam(3, $users_idusers, PDO::PARAM_INT);
+        // on attribue les valeurs grâce au bindParam(), c'est valeurs doivent être des variables, elles sont donc variables  sur le serveur de base de donnée! Les paramètres sont entre " / ' avec les : suivi du nom
+
+        $prepare->bindParam(":iduser", $users_idusers, PDO::PARAM_INT);
+        $prepare->bindParam(":text", $thetext, PDO::PARAM_STR);
+        $prepare->bindParam(":title", $thetitle, PDO::PARAM_STR);
 
         // exécution de la requête préparée
         $prepare->execute();
