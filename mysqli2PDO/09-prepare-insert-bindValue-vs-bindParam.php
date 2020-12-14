@@ -26,18 +26,31 @@ if(isset($_POST['thetitle'])){
         // on prépare la requête
         $prepare = $dbPDO->prepare($sql);
 
-        // on attribue les valeurs grâce au bindValue()
+        // on attribue les valeurs grâce au bindValue(), c'est valeurs peuvent être de tout types, elles sont fixes sur le serveur de base de donnée (on doit les réinitialiser pour changer ces valeurs)
+        $prepare->bindValue(1, "Lala".$thetitle, PDO::PARAM_STR);
+        $prepare->bindValue(2, $thetext, PDO::PARAM_STR);
+        $prepare->bindValue(3, $users_idusers, PDO::PARAM_INT);
+
+        // exécution de la requête préparée
+        $prepare->execute();
+
+        // la modification des variables du prepare après l'execute NE fonctionne pas car on a utilisé un bindValue()
+        $thetitle.=" lulu";
+        $thetext.=" du blabla";
+
+        // exécution de la requête préparée, ne change pas les variables des bindValue
+        $prepare->execute();
+
+        // il faut redéclarer les variables si on veut les changer!
         $prepare->bindValue(1, $thetitle, PDO::PARAM_STR);
         $prepare->bindValue(2, $thetext, PDO::PARAM_STR);
         $prepare->bindValue(3, $users_idusers, PDO::PARAM_INT);
 
-        try {
-            // exécution de la requête
-            $prepare->execute();
-            $message = "Article inséré";
-        } catch (PDOException $e) {
-            $message = "Erreur lors de l'insertion: " . $e->getMessage();
-        }
+        // la deuxième exécution utilise les arguments passés en paramètres par la requête préparée (se trouve déjà côté serveur de DB)
+        $prepare->execute();
+
+        $message = "Article inséré";
+
 
     }else{
         $message = "Vos données ne sont pas au format adéquat";
@@ -83,10 +96,10 @@ $request->closeCursor();
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Insertion préparée et affichage des articles</title>
+    <title>Insertion préparée avec bindValue et affichage des articles</title>
 </head>
 <body>
-<h2>Insertion d'un nouvel article</h2>
+<h2>Insertion d'un nouvel article avec bindValue</h2>
 <?php
 if(isset($message)) echo "<h3>$message</h3>";
 ?>
