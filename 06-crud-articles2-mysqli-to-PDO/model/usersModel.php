@@ -1,6 +1,13 @@
 <?php
 // connect function
-function connectUser(PDO $connect,string $login, string $pwd){
+
+/**
+ * @param PDO $connect
+ * @param string $login
+ * @param string $pwd
+ * @return false|array
+ */
+function connectUser(PDO $connect, string $login, string $pwd){
     // traitement des données
     $login = htmlspecialchars(strip_tags(trim($login)),ENT_QUOTES);
     $pwd = htmlspecialchars(strip_tags(trim($pwd)),ENT_QUOTES);
@@ -30,8 +37,16 @@ function connectUser(PDO $connect,string $login, string $pwd){
 }
 
 // find all user (Rédacteur and administateur)
-function AllUser($c){
+
+/**
+ * @param PDO $c
+ * @return array|false
+ */
+function AllUser(PDO $c){
     $sql="SELECT idusers, thename FROM users ORDER BY thename ASC;";
-    $request = mysqli_query($c,$sql);
-    return mysqli_fetch_all($request,MYSQLI_ASSOC);
+    $recup = $c->query($sql);
+    if($recup->rowCount()) {
+        return $recup->fetchAll(PDO::FETCH_ASSOC);
+    }
+    return false;
 }

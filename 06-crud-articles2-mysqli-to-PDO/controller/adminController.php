@@ -69,7 +69,7 @@ if(isset($_GET['p'])&&$_GET['p']=="create"){
     }
 
     // on récupère tous les auteurs potentiels
-    $recup_autors = AllUser($db);
+    $recup_autors = AllUser($dbPDO);
 
     require_once "view/adminInsertArticleView.php";
     //var_dump($_POST);
@@ -148,7 +148,7 @@ if(isset($_GET['p'])&&$_GET['p']=="update"){
         // on récupère l'article en question
         $recupArticle = articleLoadFull($db,$id);
         // on récupère tous les auteurs
-        $recupUsers = AllUser($db);
+        $recupUsers = AllUser($dbPDO);
 
 
     }else{
