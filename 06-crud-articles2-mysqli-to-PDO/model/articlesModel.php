@@ -18,7 +18,14 @@ FROM articles";
 }
 
 // Load all articles with author but with 300 caracters from "texte" with pagination LIMIT
-function articlesLoadResumePagination(PDO $cdb, int $begin,int $nbperpage=10){
+
+/**
+ * @param PDO $cdb
+ * @param int $begin
+ * @param int $nbperpage
+ * @return array|false
+ */
+function articlesLoadResumePagination(PDO $cdb, int $begin, int $nbperpage=10){
 
     $req = "SELECT a.idarticles, a.titre, LEFT(a.texte,300) AS texte, a.thedate, u.idusers, u.thename 
 FROM articles a 
@@ -42,17 +49,25 @@ LIMIT ?, ? ;";
 }
 
 // LOAD full article with ID
-function articleLoadFull($connect,$id){
+
+/**
+ * @param PDO $connect
+ * @param int $id
+ * @return false|mixed
+ */
+function articleLoadFull(PDO $connect, int $id){
     $id = (int) $id;
     $req = "SELECT * FROM articles a 
 	INNER JOIN users u 
 		ON a.users_idusers = u.idusers
-    WHERE a.idarticles=$id";
-    $recup = mysqli_query($connect,$req);
+    WHERE a.idarticles=?";
+
+    $prepare = $connect->prepare($req);
+    $prepare->execute([$id]);
     // si on a 1 résultat
-    if(mysqli_num_rows($recup)){
-        // on utilise le fetch all car il peut y avoir plus d'un résultat
-        return mysqli_fetch_assoc($recup);
+    if($prepare->rowCount()){
+        // on utilise le fetch car il ne peut y avoir qu'un résultat
+        return $prepare->fetch(PDO::FETCH_ASSOC);
     }
     // no result
     return false;

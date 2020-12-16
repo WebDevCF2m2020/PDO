@@ -55,7 +55,7 @@ if(isset($_GET["detailArticle"])){
         exit();
     }
     // appel de la fonction du modèle articlesModel.php
-    $recup = articleLoadFull($db,$idArticles);
+    $recup = articleLoadFull($dbPDO,$idArticles);
 
     // pas d'article, la page n'existe pas
     if(!$recup){

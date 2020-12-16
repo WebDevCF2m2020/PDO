@@ -25,7 +25,7 @@ if(isset($_GET["detailArticle"])){
         exit();
     }
     // appel de la fonction du modèle articlesModel.php
-    $recup = articleLoadFull($db,$idArticles);
+    $recup = articleLoadFull($dbPDO,$idArticles);
 
     // pas d'article, la page n'existe pas
     if(!$recup){
@@ -87,7 +87,7 @@ if(isset($_GET['p'])&&$_GET['p']=="delete"){
         $id = (int) $_GET['id'];
 
         // on récupère l'article en question
-        $recup =articleLoadFull($db,$id);
+        $recup =articleLoadFull($dbPDO,$id);
 
         // pas de récupération
         if(!$recup){
@@ -146,7 +146,7 @@ if(isset($_GET['p'])&&$_GET['p']=="update"){
         // chargement pour la vue
 
         // on récupère l'article en question
-        $recupArticle = articleLoadFull($db,$id);
+        $recupArticle = articleLoadFull($dbPDO,$id);
         // on récupère tous les auteurs
         $recupUsers = AllUser($dbPDO);
 
