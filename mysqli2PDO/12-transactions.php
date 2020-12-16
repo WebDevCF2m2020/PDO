@@ -129,7 +129,7 @@ $request->closeCursor();
 <p>Lorsqu'on effectue un exec, un query, un prepare suivi d'un execute, l'autocommit est activé, c'est à dire que la requête est effectuée dès l'appel d'une de ces fonction.</p>
 <h3>La transaction désactive l'autocommit !</h3>
 <p>Ne pas oublier d'activer les erreurs PDO pour faire fonctionner le try/catch</p>
-<code>$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);</code>
+<code>try{ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);</code>
 <h4>Ouverture de transaction</h4>
 <code>$db->beginTransaction();</code>
 <h4>Exécution de toutes le requêtes nécessaires à notre transaction (insert, delete, update, parfois select)</h4>
@@ -138,7 +138,7 @@ $request->closeCursor();
 <code>$db->commit()</code>
 <h4>Pas d'erreurs, pas de catch, la transaction est validée par le commit</h4>
 <h4>En cas d'erreur le catch lance un retour en arrière: $db->rollBack()</h4>
-<code>..}catch(Exception $e){ $db->rollBack()</code>
+<code>..}catch(Exception $e){ $db->rollBack()}</code>
 <h3>Toutes les modifications sont annulées et remise à leur état initial</h3>
 
 
