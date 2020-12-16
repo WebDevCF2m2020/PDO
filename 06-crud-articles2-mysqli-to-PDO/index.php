@@ -7,6 +7,7 @@ session_start();
 
 // dependencies
 require_once "config.php";
+// mysqli connection
 require_once "model/connectDB.php";
 // PDO connection
 require_once "model/connectDbPDO.php";
@@ -16,6 +17,8 @@ $db = connectDB();
 
 // Db PDO connection
 $dbPDO = connectDbPDO();
+
+// var_dump($db,$dbPDO);
 
 
 // connect mysqli error
