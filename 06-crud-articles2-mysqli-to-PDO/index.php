@@ -8,14 +8,29 @@ session_start();
 // dependencies
 require_once "config.php";
 require_once "model/connectDB.php";
+// PDO connection
+require_once "model/connectDbPDO.php";
 
-// DB connection
+// DB connection mysqli
 $db = connectDB();
 
-// connect error
+// Db PDO connection
+$dbPDO = connectDbPDO();
+
+
+// connect mysqli error
 if(!$db){
     // view  connect error
     include "view/errorConnectView.php";
+    // stop working
+    die();
+}
+
+// connect PDO error
+// $dbPDO vaut une chaîne de caractère en cas d'erreur
+if(is_string($dbPDO)){
+    // view  connect error
+    include "view/errorConnectPDOView.php";
     // stop working
     die();
 }
