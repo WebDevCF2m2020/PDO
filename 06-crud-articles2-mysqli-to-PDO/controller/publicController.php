@@ -87,7 +87,7 @@ $nbTotalArticles = countAllArticles($dbPDO);
 $debut_tab = ($pgactu-1)*NUMBER_ARTICLE_PER_PAGE;
 
 // requête avec le LIMIT appliqué
-$recupPagination = articlesLoadResumePagination($db,$debut_tab,NUMBER_ARTICLE_PER_PAGE);
+$recupPagination = articlesLoadResumePagination($dbPDO,$debut_tab,NUMBER_ARTICLE_PER_PAGE);
 
 // pas d'articles
 if(!$recupPagination){

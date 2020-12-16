@@ -2,30 +2,40 @@
 
 
 // Count number of articles
+
+
+/**
+ * @param PDO $c
+ * @return int
+ */
 function countAllArticles(PDO $c){
     // le count renvoie une ligne de résultat avec le nombre d'articles, utiliser la clef primaire permet d'éviter qu'il compte réellement le nombre d'articles: c'est un résultat se trouvant en début du code de la table (dans l'index)
     $req = "SELECT COUNT(idarticles) AS nb
 FROM articles";
     $recup = $c->query($req);
     $out = $recup->fetch(PDO::FETCH_ASSOC);
-    return $out["nb"];
+    return (int) $out["nb"];
 }
 
 // Load all articles with author but with 300 caracters from "texte" with pagination LIMIT
-function articlesLoadResumePagination($cdb,$begin,$nbperpage=10){
-    $begin = (int) $begin;
-    $nbperpage = (int) $nbperpage;
+function articlesLoadResumePagination(PDO $cdb, int $begin,int $nbperpage=10){
+
     $req = "SELECT a.idarticles, a.titre, LEFT(a.texte,300) AS texte, a.thedate, u.idusers, u.thename 
 FROM articles a 
 	INNER JOIN users u 
 		ON a.users_idusers = u.idusers
 ORDER BY a.thedate DESC 
-LIMIT $begin, $nbperpage;";
-    $recup = mysqli_query($cdb,$req);
-    // si au moins 1 résultat
-    if(mysqli_num_rows($recup)){
+LIMIT ?, ? ;";
+
+    $prepare = $cdb->prepare($req);
+    $prepare->bindParam(1,$begin,PDO::PARAM_INT);
+    $prepare->bindParam(2,$nbperpage,PDO::PARAM_INT);
+
+    $prepare->execute();
+
+    if($prepare->rowCount()){
         // on utilise le fetch all car il peut y avoir plus d'un résultat
-        return mysqli_fetch_all($recup,MYSQLI_ASSOC);
+        return $prepare->fetchAll(PDO::FETCH_ASSOC);
     }
     // no result
     return false;

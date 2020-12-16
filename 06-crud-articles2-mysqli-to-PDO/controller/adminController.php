@@ -182,7 +182,7 @@ $nb_per_page_admin = 10;
 $debut_tab = ($pgactu-1)*$nb_per_page_admin;
 
 // requête avec le LIMIT appliqué
-$recupPagination = articlesLoadResumePagination($db,$debut_tab,$nb_per_page_admin);
+$recupPagination = articlesLoadResumePagination($dbPDO,$debut_tab,$nb_per_page_admin);
 
 // pas d'articles
 if(!$recupPagination){
