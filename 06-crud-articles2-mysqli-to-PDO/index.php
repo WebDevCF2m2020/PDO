@@ -10,10 +10,10 @@ require_once "config.php";
 require_once "model/connectDB.php";
 
 // DB connection
-$db = connectDB();
+//$db = connectDB();
 
 // connect error
-if(!$db){
+if(!$connexion){
     // view  connect error
     include "view/errorConnectView.php";
     // stop working
