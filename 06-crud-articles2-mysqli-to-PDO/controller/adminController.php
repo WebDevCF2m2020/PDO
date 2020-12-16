@@ -174,7 +174,7 @@ if(isset($_GET['pg'])){
     $pgactu = 1;
 }
 // calcul pour la requête - nombre d'articles totaux, sans erreurs SQL ce sera toujours un int, de 0 à ...
-$nbTotalArticles = countAllArticles($db);
+$nbTotalArticles = countAllArticles($dbPDO);
 
 $nb_per_page_admin = 10;
 
