@@ -31,6 +31,9 @@ if(isset($_GET['idArt'])&&ctype_digit($_GET['idArt'])){
     }
     // création de l'objet d'affichage de l'article
     $recupArticlesById= $prepare->fetch(PDO::FETCH_OBJ);
+
+    // on réinitialise les données
+    $prepare->closeCursor();
 }
 
 
@@ -46,8 +49,6 @@ $request= $dbPDO->query($sql);
 
 // transformation du résultat de la requête en tableau indexé (toujours pour fetchAll) avec des valeurs de type objets (PDO::FETCH_OBJ)
 $recupAllArticles = $request->fetchAll(PDO::FETCH_OBJ);
-
-
 
 
 // Portabilité du code (inutile en mySQL ou MariaDB): remise de la requête à son état initial

@@ -16,7 +16,12 @@ if(isset($_GET['p'])&&$_GET['p']=="connect"){
         $thename = htmlspecialchars(strip_tags(trim($_POST['thename'])),ENT_QUOTES);
         $thepwd = htmlspecialchars(strip_tags(trim($_POST['thepwd'])),ENT_QUOTES);
 
+
         $connect = connectUser($connexion,$thename,$thepwd);
+
+        // passage en PDO
+        $connect = connectUser($dbPDO,$thename,$thepwd);
+
 
         // connexion réussie
         if($connect){
@@ -54,7 +59,7 @@ if(isset($_GET["detailArticle"])){
         exit();
     }
     // appel de la fonction du modèle articlesModel.php
-    $recup = articleLoadFull($db,$idArticles);
+    $recup = articleLoadFull($dbPDO,$idArticles);
 
     // pas d'article, la page n'existe pas
     if(!$recup){
@@ -80,13 +85,13 @@ if(isset($_GET['pg'])){
     $pgactu = 1;
 }
 // calcul pour la requête - nombre d'articles totaux, sans erreurs SQL ce sera toujours un int, de 0 à ...
-$nbTotalArticles = countAllArticles($db);
+$nbTotalArticles = countAllArticles($dbPDO);
 
 // Calcul pour avoir la première partie du LIMIT *, 5 dans la requête stockée dans articlesModel.php nommée articlesLoadResumePagination()
 $debut_tab = ($pgactu-1)*NUMBER_ARTICLE_PER_PAGE;
 
 // requête avec le LIMIT appliqué
-$recupPagination = articlesLoadResumePagination($db,$debut_tab,NUMBER_ARTICLE_PER_PAGE);
+$recupPagination = articlesLoadResumePagination($dbPDO,$debut_tab,NUMBER_ARTICLE_PER_PAGE);
 
 // pas d'articles
 if(!$recupPagination){

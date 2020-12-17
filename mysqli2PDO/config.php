@@ -9,4 +9,4 @@ define("DB_PORT",3306);
 define("DB_CHARSET","utf8");
 
 // est-on en production (true) ou en développement (false)
-define("PROD",false);
+define("PROD",FALSE);

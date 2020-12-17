@@ -1,6 +1,13 @@
 <?php
 // connect function
-function connectUser($connect,$login,$pwd){
+
+/**
+ * @param PDO $connect
+ * @param string $login
+ * @param string $pwd
+ * @return false|array
+ */
+function connectUser(PDO $connect, string $login, string $pwd){
     // traitement des données
     $login = htmlspecialchars(strip_tags(trim($login)),ENT_QUOTES);
     $pwd = htmlspecialchars(strip_tags(trim($pwd)),ENT_QUOTES);
@@ -9,11 +16,20 @@ function connectUser($connect,$login,$pwd){
 	FROM users u
     INNER JOIN droit d 
 		ON d.iddroit = u.droit_iddroit
-    WHERE u.thename='$login' AND u.thepwd='$pwd';";
-    $recup = mysqli_query($connect,$sql) or die(mysqli_error($connect));
+    WHERE u.thename=:login AND u.thepwd=:pwd;";
 
-    if(mysqli_num_rows($recup)){
-        return mysqli_fetch_assoc($recup);
+    // prepare request
+    $prepare = $connect->prepare($sql);
+
+    // param request
+    $prepare->bindValue(":login",$login,PDO::PARAM_STR);
+    $prepare->bindValue(":pwd",$pwd,PDO::PARAM_STR);
+
+    // send request
+    $prepare->execute();
+
+    if($prepare->rowCount()){
+        return $prepare->fetch(PDO::FETCH_ASSOC);
     }else{
         return false;
     }
@@ -21,8 +37,16 @@ function connectUser($connect,$login,$pwd){
 }
 
 // find all user (Rédacteur and administateur)
-function AllUser($c){
+
+/**
+ * @param PDO $c
+ * @return array|false
+ */
+function AllUser(PDO $c){
     $sql="SELECT idusers, thename FROM users ORDER BY thename ASC;";
-    $request = mysqli_query($c,$sql);
-    return mysqli_fetch_all($request,MYSQLI_ASSOC);
+    $recup = $c->query($sql);
+    if($recup->rowCount()) {
+        return $recup->fetchAll(PDO::FETCH_ASSOC);
+    }
+    return false;
 }

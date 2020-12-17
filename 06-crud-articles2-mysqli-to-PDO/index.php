@@ -7,15 +7,41 @@ session_start();
 
 // dependencies
 require_once "config.php";
+// mysqli connection
 require_once "model/connectDB.php";
+// PDO connection
+require_once "model/connectDbPDO.php";
+
 
 // DB connection
 //$db = connectDB();
 
 // connect error
 if(!$connexion){
+
+// DB connection mysqli
+$db = connectDB();
+
+// Db PDO connection
+$dbPDO = connectDbPDO();
+
+// var_dump($db,$dbPDO);
+
+
+// connect mysqli error
+if(!$db){
+
     // view  connect error
     include "view/errorConnectView.php";
+    // stop working
+    die();
+}
+
+// connect PDO error
+// $dbPDO vaut une chaîne de caractère en cas d'erreur
+if(is_string($dbPDO)){
+    // view  connect error
+    include "view/errorConnectPDOView.php";
     // stop working
     die();
 }

@@ -25,7 +25,7 @@ if(isset($_GET["detailArticle"])){
         exit();
     }
     // appel de la fonction du modèle articlesModel.php
-    $recup = articleLoadFull($db,$idArticles);
+    $recup = articleLoadFull($dbPDO,$idArticles);
 
     // pas d'article, la page n'existe pas
     if(!$recup){
@@ -69,7 +69,7 @@ if(isset($_GET['p'])&&$_GET['p']=="create"){
     }
 
     // on récupère tous les auteurs potentiels
-    $recup_autors = AllUser($db);
+    $recup_autors = AllUser($dbPDO);
 
     require_once "view/adminInsertArticleView.php";
     //var_dump($_POST);
@@ -87,7 +87,7 @@ if(isset($_GET['p'])&&$_GET['p']=="delete"){
         $id = (int) $_GET['id'];
 
         // on récupère l'article en question
-        $recup =articleLoadFull($db,$id);
+        $recup =articleLoadFull($dbPDO,$id);
 
         // pas de récupération
         if(!$recup){
@@ -146,9 +146,9 @@ if(isset($_GET['p'])&&$_GET['p']=="update"){
         // chargement pour la vue
 
         // on récupère l'article en question
-        $recupArticle = articleLoadFull($db,$id);
+        $recupArticle = articleLoadFull($dbPDO,$id);
         // on récupère tous les auteurs
-        $recupUsers = AllUser($db);
+        $recupUsers = AllUser($dbPDO);
 
 
     }else{
@@ -174,7 +174,7 @@ if(isset($_GET['pg'])){
     $pgactu = 1;
 }
 // calcul pour la requête - nombre d'articles totaux, sans erreurs SQL ce sera toujours un int, de 0 à ...
-$nbTotalArticles = countAllArticles($db);
+$nbTotalArticles = countAllArticles($dbPDO);
 
 $nb_per_page_admin = 10;
 
@@ -182,7 +182,7 @@ $nb_per_page_admin = 10;
 $debut_tab = ($pgactu-1)*$nb_per_page_admin;
 
 // requête avec le LIMIT appliqué
-$recupPagination = articlesLoadResumePagination($db,$debut_tab,$nb_per_page_admin);
+$recupPagination = articlesLoadResumePagination($dbPDO,$debut_tab,$nb_per_page_admin);
 
 // pas d'articles
 if(!$recupPagination){
