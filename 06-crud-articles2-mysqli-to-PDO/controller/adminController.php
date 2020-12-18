@@ -99,7 +99,7 @@ if(isset($_GET['p'])&&$_GET['p']=="delete"){
             // on clique sur confirmation de suppression
             if(isset($_GET['ok'])){
                 // on tente de supprimer l'article
-                if(deleteArticle($db,$id)){
+                if(deleteArticle($dbPDO,$id)){
                     $erreur="Suppression effectuée, vous allez être rédirigé dans 5 secondes <script>setTimeout(function(){ document.location.href = './' }, 5000);</script>";
                 }else{
                     $erreur="Echec de la suppression, erreur inconnue, Veuillez recommencer!";
@@ -132,7 +132,7 @@ if(isset($_GET['p'])&&$_GET['p']=="update"){
         if(isset($_POST['users_idusers'])){
 
             //var_dump($_POST);
-            $update = updateArticle($db,$_POST,$id);
+            $update = updateArticle($dbPDO,$_POST,$id);
 
             // si l'update a eu lieue
             if($update===true){

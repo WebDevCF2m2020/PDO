@@ -73,8 +73,15 @@ function articleLoadFull(PDO $connect, int $id){
     return false;
 }
 
-// insertion d'un nouvel article
-function insertArticle(PDO $c, string $title, string $text,int $id){
+/**
+ * insertion d'un nouvel article
+ * @param PDO $c
+ * @param string $title
+ * @param string $text
+ * @param int $id
+ * @return bool|int|mixed
+ */
+function insertArticle(PDO $c, string $title, string $text, int $id){
 
     // prepare la requête
     $sql="INSERT INTO articles (titre,texte,users_idusers) VALUES (?,?,?);";
@@ -88,12 +95,25 @@ function insertArticle(PDO $c, string $title, string $text,int $id){
     }
 }
 
-// suppression d'un article via son ID
+/**
+ * suppression d'un article via son ID
+ * @param PDO $connect
+ * @param int $id
+ * @return bool
+ */
+function deleteArticle(PDO $connect, int $id){
 
-function deleteArticle($connect,$id){
-    $id = (int) $id;
-    $sql="DELETE FROM articles WHERE idarticles=$id";
-    return (@mysqli_query($connect,$sql))? true : false;
+    $sql="DELETE FROM articles WHERE idarticles=?";
+
+    $prepare = $connect->prepare($sql);
+
+    try{
+        $prepare->execute([$id]);
+        return true;
+    }catch (PDOException $e){
+        return false;
+    }
+
 }
 
 /*
