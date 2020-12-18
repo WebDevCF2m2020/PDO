@@ -123,11 +123,10 @@ function deleteArticle(PDO $connect, int $id){
  * $id -> variable GET idarticles
  */
 
-function updateArticle($db,$datas,$id){
+function updateArticle(PDO $db, array $datas, int $id){
     // traîtement des variables
-    // $_GET
     $id = (int) $id;
-    // $_POST => on pourrait utiliser extract(), plus rapide mais dangereux et non sécurisé sans mettre les mêmes lignes que celles ci-dessous
+
     $idarticles = (int) $datas['idarticles'];
     $titre = htmlspecialchars(strip_tags(trim($datas['titre'])),ENT_QUOTES);
     // exception pour le strip_tags qui va accepter les balises html entre allowable_tags
@@ -148,9 +147,16 @@ function updateArticle($db,$datas,$id){
     if(empty($id)||empty($idarticles)||empty($titre)||
         empty($texte)||empty($thedate)||empty($users_idusers)) return "Vos champs ne sont pas correctement remplis";
 
-    $sql ="UPDATE articles SET titre = '$titre', texte ='$texte',thedate='$thedate', users_idusers= $users_idusers WHERE idarticles = $idarticles";
+    $sql ="UPDATE articles SET titre = ?, texte =?,thedate=?, users_idusers= ? WHERE idarticles = ?";
+    $query = $db->prepare($sql);
+    try {
+        $query->execute([$titre,$texte,$thedate,$users_idusers,$idarticles]);
+        return true;
+    }catch(PDOException $e){
+        return $e->getMessage();
+    }
 
-   return (mysqli_query($db,$sql))? true : "Erreur inconnue lors de la modification, Veuillez recommencer";
+
 
 
 }
