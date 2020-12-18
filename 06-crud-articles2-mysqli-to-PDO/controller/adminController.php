@@ -56,13 +56,14 @@ if(isset($_GET['p'])&&$_GET['p']=="create"){
             $erreur = "Format des champs non valides";
         }else{
             // insertion d'article
-            $insert = insertArticle($db,$titre,$texte,$idusers);
-            if($insert){
+            $insert = insertArticle($dbPDO,$titre,$texte,$idusers);
+            if($insert===true){
                 header("Location: ./");
                 exit;
             }else{
-
-                $erreur ="Problème lors de l'insertion";
+                if($insert==23000) {
+                    $erreur = "Votre titre doit être unique!";
+                }
             }
 
         }

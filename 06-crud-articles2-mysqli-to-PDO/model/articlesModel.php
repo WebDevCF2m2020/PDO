@@ -74,11 +74,18 @@ function articleLoadFull(PDO $connect, int $id){
 }
 
 // insertion d'un nouvel article
-function insertArticle($c,$title,$text,$id){
+function insertArticle(PDO $c, string $title, string $text,int $id){
 
-    $sql="INSERT INTO articles (titre,texte,users_idusers) VALUES ('$title','$text',$id);";
-    $request = mysqli_query($c,$sql);
-    return ($request)?true:false;
+    // prepare la requête
+    $sql="INSERT INTO articles (titre,texte,users_idusers) VALUES (?,?,?);";
+    $prepare= $c->prepare($sql);
+    try {
+        $prepare->execute([$title, $text, $id]);
+        return true;
+
+    }catch(Exception $exception){
+        return $exception->getCode();
+    }
 }
 
 // suppression d'un article via son ID
